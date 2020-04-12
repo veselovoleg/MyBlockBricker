@@ -30,6 +30,7 @@ public class Paddle : MonoBehaviour {
         transform.position = paddlePos;
     }
 
+    // Get position Ox
     private float GetPositionOx() {
         if ((sphere != null) & (gameStatus != null)) {
             return gameStatus.CheckAutoplayEnabled() ? sphere.transform.position.x : CalculateMousePositionX();
