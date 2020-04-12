@@ -3,18 +3,16 @@
 public class Sphere : MonoBehaviour {
     // Options
     [SerializeField] Paddle paddle;
-    [SerializeField] float launchBallX = 2f;
-    [SerializeField] float launchBallY = 15f;
+    // Random factor for bouncing
     [SerializeField] float randomFactor = 0.25f;
-    [SerializeField] float maxHorizontalSpeed = 8;
-    [SerializeField] float maxVerticalSpeed = 8;
-    // Каким то образом вставить постоянную нетеряемую скорость
-    [SerializeField] float sphereSpeed = 8;
+    [SerializeField] float MinimumSpeed = 25;
+    [SerializeField] float MaximumSpeed = 30;
+    //To prevent the ball from keep bouncing horizontally we enforce a minimum vertical movement
+    [SerializeField] float MinimumVerticalMovement = 0.1f;
 
 
     // State
-    public bool ballLaunched = false;
-
+    private bool ballLaunched = false;
     private Rigidbody2D ballRigidbody2D;
     private Vector2 paddleToBallVector;
 
@@ -42,22 +40,31 @@ public class Sphere : MonoBehaviour {
 
     // Limit Ball Speed
     private void LimitBallSpeed() {
-        Vector2 velocity = ballRigidbody2D.velocity;
+        //Get current speed and direction
+        Vector2 direction = ballRigidbody2D.velocity;
+        float speed = direction.magnitude;
+        direction.Normalize();
 
-        // Horizontal
-        if (velocity.x > maxHorizontalSpeed) {
-            velocity.x = maxHorizontalSpeed * 0.5f;
+        //Make sure the ball never goes straight horizotal else it could never come down to the paddle.
+        if (direction.y > -MinimumVerticalMovement && direction.y < MinimumVerticalMovement) {
+            //Adjust the y, make sure it keeps going into the direction it was going (up or down)
+            direction.y = direction.y < 0 ? -MinimumVerticalMovement : MinimumVerticalMovement;
+
+            //Adjust the x also as x + y = 1
+            direction.x = direction.x < 0 ? -1 + MinimumVerticalMovement : 1 - MinimumVerticalMovement;
+
+            //Apply it back to the ball
+            ballRigidbody2D.velocity = direction * speed;
         }
 
-        // Vertical
-        if (velocity.y > maxVerticalSpeed) {
-            velocity.y = maxVerticalSpeed * 0.5f;
+        if (speed < MinimumSpeed || speed > MaximumSpeed) {
+            //Limit the speed so it always above min en below max
+            speed = Mathf.Clamp(speed, MinimumSpeed, MaximumSpeed);
+
+            //Apply the limit
+            //Note that we don't use * Time.deltaTime here since we set the velocity once, not every frame.
+            ballRigidbody2D.velocity = direction * speed;
         }
-
-        //if (velocity.y < -maxVerticalSpeed) velocity.y = -maxVerticalSpeed;
-        //if (velocity.x < -maxHorizontalSpeed) velocity.x = -maxHorizontalSpeed;
-
-        ballRigidbody2D.velocity = velocity;
     }
 
     // On collision Enter 2D
@@ -77,7 +84,20 @@ public class Sphere : MonoBehaviour {
 
     // Launch ball
     public void LaunchBall() {
+        //Create a random vector but make sure it always point "up" (z axis in this case) else it could be launched straight down
+        Vector2 randomDirection = new Vector2(Random.Range(-1.0F, 1.0F), Mathf.Abs(Random.value));
+
+        //Make sure we start at the minimum speed limit
+        randomDirection = randomDirection.normalized * MinimumSpeed;
+
+        //Apply it to the rigidbody so it keeps moving into that direction, untill it hits a block or wall
+        ballRigidbody2D.velocity = randomDirection;
+
         ballLaunched = true;
-        ballRigidbody2D.velocity = new Vector2(launchBallX, launchBallY);
+    }
+
+    // Get ballLaunched value
+    public bool getBallLaunchedValue() {
+        return ballLaunched;
     }
 }
