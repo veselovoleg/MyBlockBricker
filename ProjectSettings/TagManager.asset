@@ -6,6 +6,11 @@ TagManager:
   tags:
   - BreakableBlueBlock
   - UnbreakableGrayBlock
+  - UnbreakableBlock
+  - Breakable1HpBlock
+  - Breackable1HpBlock
+  - Breackable2HpBlock
+  - Breackable3HpBlock
   layers:
   - Default
   - TransparentFX
