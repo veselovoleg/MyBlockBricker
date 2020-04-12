@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1380186683387476205}
   - component: {fileID: 1868004474826036941}
   m_Layer: 0
-  m_Name: BlueSquare
+  m_Name: UnbreakableBlock
   m_TagString: BreakableBlueBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,8 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d823ef8f7e59b154d9ff2bd05d1dbce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakableBlockTags: []
-  unBreakableBlockTags: []
+  breakableBlock: 0
   maxHits: 3
   hitSprites:
   - {fileID: 21300000, guid: cd0d487791223014bbfd6e17bb5cadfb, type: 3}

@@ -1,11 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Block : MonoBehaviour {
+    //
     // Options
+    [SerializeField] bool breakableBlock = true;
     [SerializeField] int maxHits;
     [SerializeField] Sprite[] hitSprites;
 
+    // Storage
     private int currentHits;
+    private bool blockInvincible = false;
 
     // On Start
     private void Start() {
@@ -19,14 +24,19 @@ public class Block : MonoBehaviour {
 
     // On collision Enter 2D
     private void OnCollisionEnter2D(Collision2D collision) {
-        currentHits--;
-        Debug.Log($"Object: {gameObject.name}. currentHits: {currentHits}");
+        if (breakableBlock) {
+            currentHits--;
 
-        if (currentHits <= 0) {
-            Destroy(gameObject);
+            if (currentHits <= 0) {
+                Destroy(gameObject);
+            } else {
+                ShowNextBlockHitSprite();
+            }
+
+            Debug.Log($"Object: {gameObject.name}. currentHits: {currentHits}");
         } else {
-            ShowNextBlockHitSprite();
-        }
+            Debug.Log($"Object: {gameObject.name}. Unbreakable");
+        }   
     }
 
     // Show next hit sprite for block
@@ -37,5 +47,12 @@ public class Block : MonoBehaviour {
         if (spriteIndex < hitSprites.Length) {
             spriteRenderer.sprite = hitSprites[spriteIndex];
         } 
+    }
+
+    // Wait for seconds
+    private IEnumerator SetBlockInvincibleInSeconds(float duration) {
+        blockInvincible = true;
+        yield return new WaitForSeconds(duration);
+        blockInvincible = false;
     }
 }
