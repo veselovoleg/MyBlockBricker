@@ -675,8 +675,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616405807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.245502, y: 1.45, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 16.245502, y: 1.19, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -733,8 +733,8 @@ MonoBehaviour:
   paddle: {fileID: 822511747}
   randomFactor: 3.1
   MinimumSpeed: 20
-  MaximumSpeed: 22
-  MinimumVerticalMovement: 0.1
+  MaximumSpeed: 20
+  MinimumVerticalMovement: 0.5
 --- !u!1001 &710032944
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -982,7 +982,7 @@ Transform:
   m_GameObject: {fileID: 822511743}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 16.2, y: 0.54, z: 0}
-  m_LocalScale: {x: 0.5, y: 1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.65, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1364,6 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013013fc465ae4342a1b2ab8e7d0b574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoPlayEnabled: 0
   breackableBlocksTags:
   - BreakableBlueBlock
 --- !u!4 &1174203689

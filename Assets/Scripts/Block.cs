@@ -9,11 +9,14 @@ public class Block : MonoBehaviour {
     [SerializeField] Sprite[] hitSprites;
 
     // Storage
+    GameStatus gameStatus;
+
     private int currentHits;
     private bool blockInvincible = false;
 
     // On Start
     private void Start() {
+        gameStatus = FindObjectOfType<GameStatus>();
         currentHits = maxHits;
     }
 
@@ -25,18 +28,26 @@ public class Block : MonoBehaviour {
     // On collision Enter 2D
     private void OnCollisionEnter2D(Collision2D collision) {
         if (breakableBlock) {
-            currentHits--;
-
-            if (currentHits <= 0) {
-                Destroy(gameObject);
-            } else {
-                ShowNextBlockHitSprite();
-            }
-
-            Debug.Log($"Object: {gameObject.name}. currentHits: {currentHits}");
+            CalculateBlockHits();
         } else {
             Debug.Log($"Object: {gameObject.name}. Unbreakable");
         }   
+    }
+    // Calculate block hits
+    private void CalculateBlockHits() {
+        currentHits--;
+
+        if (currentHits <= 0) {
+            Destroy(gameObject);
+
+            if (gameStatus != null) {
+                gameStatus.ReduceBlocksCount();
+            }
+        } else {
+            ShowNextBlockHitSprite();
+        }
+
+        Debug.Log($"Object: {gameObject.name}. currentHits: {currentHits}");
     }
 
     // Show next hit sprite for block

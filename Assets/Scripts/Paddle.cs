@@ -8,6 +8,16 @@ public class Paddle : MonoBehaviour {
     [SerializeField] float maxX;
     [SerializeField] float screenWidthInUnits;
 
+    // State
+    GameStatus gameStatus;
+    Sphere sphere;
+
+    // On Start
+    private void Start() {
+        gameStatus = FindObjectOfType<GameStatus>();
+        sphere = FindObjectOfType<Sphere>();
+    }
+
     // On Update 
     private void Update() {
         CalculatePaddlePosition();
@@ -16,9 +26,16 @@ public class Paddle : MonoBehaviour {
     // Calcualte paddle position on Ox
     private void CalculatePaddlePosition() {
         Vector2 paddlePos = new Vector2(transform.position.x, transform.position.y);
-        paddlePos.x = Mathf.Clamp(CalculateMousePositionX(), minX, maxX);
-       // paddlePos.x = CalculateMousePositionX();
+        paddlePos.x = Mathf.Clamp(GetPositionOx(), minX, maxX);
         transform.position = paddlePos;
+    }
+
+    private float GetPositionOx() {
+        if ((sphere != null) & (gameStatus != null)) {
+            return gameStatus.CheckAutoplayEnabled() ? sphere.transform.position.x : CalculateMousePositionX();
+        } else {
+            return CalculateMousePositionX();
+        }
     }
 
     // Calculate mouse position

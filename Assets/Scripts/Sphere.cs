@@ -12,12 +12,15 @@ public class Sphere : MonoBehaviour {
 
 
     // State
+    GameStatus gameStatus;
+
     private bool ballLaunched = false;
     private Rigidbody2D ballRigidbody2D;
     private Vector2 paddleToBallVector;
 
     // On Start
     private void Start() {
+        gameStatus = FindObjectOfType<GameStatus>();
         ballRigidbody2D = GetComponent<Rigidbody2D>();
         paddleToBallVector = transform.position - paddle.transform.position;
     }
@@ -27,7 +30,7 @@ public class Sphere : MonoBehaviour {
         if (!ballLaunched) {
             LockBallToPaddle();
 
-            if (Input.GetMouseButtonDown(0)) {
+            if (Input.GetMouseButtonDown(0) || ((gameStatus != null) & gameStatus.CheckAutoplayEnabled())) {
                 LaunchBall();
             }
         }
@@ -36,6 +39,19 @@ public class Sphere : MonoBehaviour {
     // On Fixed Update
     private void FixedUpdate() {
         LimitBallSpeed();
+    }
+
+    // On collision Enter 2D
+    private void OnCollisionEnter2D(Collision2D collision) {
+        AddVelocityTweak();
+    }
+    // Add velocity tweak
+    private void AddVelocityTweak() {
+        Vector2 velocityTweak = new Vector2(Random.Range(0f, randomFactor), Random.Range(0f, randomFactor));
+
+        if (ballRigidbody2D != null) {
+            ballRigidbody2D.velocity += velocityTweak;
+        }
     }
 
     // Limit Ball Speed
@@ -64,15 +80,6 @@ public class Sphere : MonoBehaviour {
             //Apply the limit
             //Note that we don't use * Time.deltaTime here since we set the velocity once, not every frame.
             ballRigidbody2D.velocity = direction * speed;
-        }
-    }
-
-    // On collision Enter 2D
-    private void OnCollisionEnter2D(Collision2D collision) {
-        Vector2 velocityTweak = new Vector2(Random.Range(0f, randomFactor), Random.Range(0f, randomFactor));
-
-        if (ballRigidbody2D != null) {
-            ballRigidbody2D.velocity += velocityTweak;
         }
     }
 
