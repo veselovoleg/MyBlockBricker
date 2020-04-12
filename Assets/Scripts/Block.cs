@@ -12,6 +12,7 @@ public class Block : MonoBehaviour {
     GameStatus gameStatus;
 
     private int currentHits;
+    private int hitSpriteIndex = 0;
     private bool blockInvincible = false;
 
     // On Start
@@ -53,11 +54,24 @@ public class Block : MonoBehaviour {
     // Show next hit sprite for block
     private void ShowNextBlockHitSprite() {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (hitSprites.Length > 0) {
+            if (hitSpriteIndex < hitSprites.Length) {
+                spriteRenderer.sprite = hitSprites[hitSpriteIndex];
+                hitSpriteIndex++;
+            } else {
+                spriteRenderer.sprite = hitSprites[0];
+            }
+        }
+        
+
+        /*
         int spriteIndex = currentHits - 1;
 
         if (spriteIndex < hitSprites.Length) {
             spriteRenderer.sprite = hitSprites[spriteIndex];
         } 
+        */
     }
 
     // Wait for seconds
